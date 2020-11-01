@@ -8,9 +8,11 @@ const rootDir = require("../Utils/Configs/path.js");
 // Routes
 const Users = require("./Users");
 const WelcomePage = require("./WelcomePage");
+const JadwalKuliah = require("./JadwalKuliah");
 
 Router.use("/users", Users);
 Router.use("/WelcomePage", WelcomePage);
+Router.use("/jadwal-kuliah", JadwalKuliah);
 
 // Welcome Page HTML
 Router.use("/", (req, res, next) => {

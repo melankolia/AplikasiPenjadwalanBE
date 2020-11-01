@@ -5,7 +5,7 @@ module.exports = {
     getUser: (_, res) => {
         Model
             .getUser()
-            .then(([result, fieldData]) => {
+            .then(result => {
                 Response.success(res, result);
             })
             .catch(err => {
@@ -20,7 +20,8 @@ module.exports = {
                 Response.success(res, true);
             })
             .catch(err => {
-                Response.failed(res, err);
+                console.log(err);
+                Response.failed(res, false);
             });
     },
 };
