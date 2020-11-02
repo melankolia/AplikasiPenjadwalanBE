@@ -9,6 +9,7 @@ const rootDir = require("../Utils/Configs/path.js");
 const Users = require("./Users");
 const WelcomePage = require("./WelcomePage");
 const JadwalKuliah = require("./JadwalKuliah");
+const JadwalHari = require("./JadwalHari");
 const Sesi = require("./Sesi");
 const Dosen = require("./Dosen");
 
@@ -16,6 +17,7 @@ const Dosen = require("./Dosen");
 Router.use("/users", Users);
 Router.use("/WelcomePage", WelcomePage);
 Router.use("/jadwal-kuliah", JadwalKuliah);
+Router.use("/jadwal-hari", JadwalHari);
 Router.use("/sesi", Sesi);
 Router.use("/dosen", Dosen);
 

@@ -20,5 +20,14 @@ module.exports = {
             })
         })
         // return Database.execute(sql, [body.username, body.password, body.name]);
+    },
+    loginUser: (payload) => {
+        let sql = `SELECT username, name FROM users  WHERE username=? AND password=?`;
+        return new Promise((resolve, reject) => {
+            Database.query(sql, [...payload], (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            })
+        })
     }
 };
