@@ -10,12 +10,14 @@ const Users = require("./Users");
 const WelcomePage = require("./WelcomePage");
 const JadwalKuliah = require("./JadwalKuliah");
 const Sesi = require("./Sesi");
+const Dosen = require("./Dosen");
 
 
 Router.use("/users", Users);
 Router.use("/WelcomePage", WelcomePage);
 Router.use("/jadwal-kuliah", JadwalKuliah);
 Router.use("/sesi", Sesi);
+Router.use("/dosen", Dosen);
 
 // Welcome Page HTML
 Router.use("/", (req, res, next) => {
