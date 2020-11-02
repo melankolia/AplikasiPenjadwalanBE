@@ -1,7 +1,7 @@
 const Database = require("../../Utils/Configs/db");
 
 module.exports = {
-    getRuang: (payload, type = "") => {
+    getRuang: (payload = "", type = "") => {
         let sql = `SELECT ${type ? type : "id_ruang, nama_ruangan"} FROM ruang WHERE nama_ruangan LIKE "%${payload}%"`;
         console.log(sql);
         return new Promise((resolve, reject) => {
