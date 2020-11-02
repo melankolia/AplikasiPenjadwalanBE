@@ -34,6 +34,8 @@ module.exports = {
         ];
         Model.updateDosen(payload)
             .then((_) => {
+                !result.affectedRows &&
+                    Response.failed(res, "nidn_dosen Tidak Ditemukan");
                 Response.success(res, true);
             })
             .catch((err) => {
