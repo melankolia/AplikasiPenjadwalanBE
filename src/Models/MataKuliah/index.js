@@ -7,7 +7,7 @@ module.exports = {
             Database.query(sql, (err, response) => {
                 if (!err) resolve(response);
                 else reject(err);
-            })
-        })
+            });
+        });
     }
-}
+};

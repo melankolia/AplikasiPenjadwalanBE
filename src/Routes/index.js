@@ -9,10 +9,13 @@ const rootDir = require("../Utils/Configs/path.js");
 const Users = require("./Users");
 const WelcomePage = require("./WelcomePage");
 const JadwalKuliah = require("./JadwalKuliah");
+const Sesi = require("./Sesi");
+
 
 Router.use("/users", Users);
 Router.use("/WelcomePage", WelcomePage);
 Router.use("/jadwal-kuliah", JadwalKuliah);
+Router.use("/sesi", Sesi);
 
 // Welcome Page HTML
 Router.use("/", (req, res, next) => {
