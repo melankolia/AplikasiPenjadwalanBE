@@ -14,7 +14,7 @@ const JadwalJam = require("./JadwalJam");
 const Ruang = require("./Ruang");
 const Sesi = require("./Sesi");
 const Dosen = require("./Dosen");
-
+const MataKuliah = require("./MataKuliah");
 
 Router.use("/users", Users);
 Router.use("/WelcomePage", WelcomePage);
@@ -24,6 +24,7 @@ Router.use("/jadwal-jam", JadwalJam);
 Router.use("/ruang", Ruang);
 Router.use("/sesi", Sesi);
 Router.use("/dosen", Dosen);
+Router.use("/mata-kuliah", MataKuliah);
 
 // Welcome Page HTML
 Router.use("/", (req, res, next) => {
