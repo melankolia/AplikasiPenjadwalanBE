@@ -1,8 +1,8 @@
 const Database = require("../../Utils/Configs/db");
 
 module.exports = {
-    getDosen: (_) => {
-        let sql = `SELECT * FROM dosen`;
+    getDosen: (payload) => {
+        let sql = `SELECT * FROM dosen WHERE nama LIKE "%${payload}%"`;
         return new Promise((resolve, reject) => {
             Database.query(sql, (err, response) => {
                 if (!err) resolve(response);

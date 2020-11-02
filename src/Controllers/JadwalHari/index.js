@@ -3,7 +3,8 @@ const Response = require("../../Utils/Helper/Responses");
 
 module.exports = {
     getHari: (req, res, next) => {
-        Model.getHari(req)
+        let payload = req.query && req.query.nama_hari || "";
+        Model.getHari(payload)
             .then((result) => {
                 Response.success(res, result);
             })

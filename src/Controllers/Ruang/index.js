@@ -3,8 +3,10 @@ const Response = require("../../Utils/Helper/Responses");
 
 module.exports = {
     getRuang: (req, res, next) => {
-        let payload = "*";
-        Model.getRuang(payload)
+        let payload = req.query && req.query.nama_ruang || "";
+        let type = "*";
+
+        Model.getRuang(payload, type)
             .then((result) => {
                 Response.success(res, result);
             })

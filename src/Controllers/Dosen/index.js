@@ -3,7 +3,8 @@ const Response = require("../../Utils/Helper/Responses");
 
 module.exports = {
     getDosen: (req, res, next) => {
-        Model.getDosen(req)
+        let payload = req.query && req.query.nama_dosen || "";
+        Model.getDosen(payload)
             .then((result) => {
                 Response.success(res, result);
             })
