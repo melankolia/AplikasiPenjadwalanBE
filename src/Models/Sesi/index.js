@@ -10,14 +10,16 @@ module.exports = {
             });
         });
     },
-    getSesi: (data) => {
-        console.log(data.JumlahSKS);
-        let sql = `SELECT * FROM sesi ${ data && "LIMIT " + data.JumlahSKS }`;
+    getSesi: (data = "") => {
+        let sql = data
+            ? `SELECT * FROM sesi ${data && "LIMIT " + data.JumlahSKS}`
+            : `SELECT * FROM sesi`;
+
         return new Promise((resolve, reject) => {
             Database.query(sql, (err, response) => {
                 if (!err) resolve(response);
                 else reject(err);
             });
-        })
-    }
-}
+        });
+    },
+};

@@ -3,7 +3,8 @@ const Response = require("../../Utils/Helper/Responses");
 
 module.exports = {
     getJam: (req, res, next) => {
-        Model.getJam()
+        let payload = req.query && req.query.range_jam || "";
+        Model.getJam(payload)
             .then((result) => {
                 Response.success(res, result);
             })

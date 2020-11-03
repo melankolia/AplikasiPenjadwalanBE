@@ -2,7 +2,7 @@ const Database = require("../../Utils/Configs/db");
 
 module.exports = {
     getJam: (payload = "") => {
-        let sql = `SELECT * FROM jadwal_jam WHERE range_jam LIKE "${payload}"`;
+        let sql = `SELECT * FROM jadwal_jam WHERE range_jam LIKE "%${payload}%"`;
         return new Promise((resolve, reject) => {
             Database.query(sql, (err, response) => {
                 if (!err) resolve(response);

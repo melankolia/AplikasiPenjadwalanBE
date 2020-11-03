@@ -29,8 +29,8 @@ module.exports = {
         ]
         Model.loginUser(payload)
             .then((result) => {
-                result.length === 0 && Response.failed(res, "Username atau Password Salah");
-                Response.success(res, result);
+                result.length === 0 && Response.badRequest(res, "Username atau Password Salah");
+                Response.success(res, ...result);
             })
             .catch((err) => {
                 Response.failed(res, false);
