@@ -7,9 +7,18 @@ const ModelSesi = require("../../Models/Sesi");
 const Response = require("../../Utils/Helper/Responses");
 
 module.exports = {
-    getJadwalKuliah: (_, res, next) => {
-        Model.getJadwalKuliah()
+    getJadwalKuliah: (req, res, next) => {
+        let payload  = req.query && req.query.name_mk || "";
+
+        Model.getJadwalKuliah(payload)
             .then((result) => {
+                result.forEach((e) => {
+                    let tempJam = e.jam.split(',');
+                    let tempString = `${tempJam[0].slice(0, 5)} - ${tempJam[
+                      tempJam.length - 1
+                    ].slice(-5)}`;
+                    e.jam = tempString;
+                  });
                 Response.success(res, result);
             })
             .catch((err) => {
@@ -97,6 +106,7 @@ module.exports = {
 
             await ModelSesi.getSesi(total)
                 .then((response) => {
+                    console.log(sesi);
                     sesi = [...response];
                 })
                 .catch((err) => {
@@ -123,10 +133,12 @@ module.exports = {
                 } else {
                     pointerMatKul++;
                     pointerIndex = 0;
+
                     jadwalMatKul = [
                         ...jadwalMatKul,
                         [mataKuliah[pointerMatKul].id_matkul, e.id_sesi],
                     ];
+                    pointerIndex++;
                 }
             });
 
@@ -140,5 +152,16 @@ module.exports = {
         } catch (error) {
             response.failed(res, error, next);
         }
+    },
+    cleanUpJadwal: async (_, res, next) => {
+        ModelSesi.cleanUpSesi()
+            .then((response) => {
+                !response.affectedRows &&
+                    Response.failed(res, "Gagal Menghapus Data Sesi");
+                Response.success(res, true);
+            })
+            .catch((err) => {
+                Response.failed(res, err, next);
+            });
     },
 };

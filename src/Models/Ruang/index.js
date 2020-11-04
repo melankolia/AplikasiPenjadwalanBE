@@ -30,7 +30,7 @@ module.exports = {
         });
     },
     deleteRuang: (payload) => { 
-        let sql = `DELETE FROM ruang WHERE id_ruang`;
+        let sql = `DELETE FROM ruang WHERE id_ruang = ?`;
         return new Promise((resolve, reject) => {
             Database.query(sql, payload, (err, response) => {
                 if (!err) resolve(response);
