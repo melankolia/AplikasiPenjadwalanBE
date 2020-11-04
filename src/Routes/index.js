@@ -15,6 +15,7 @@ const Ruang = require("./Ruang");
 const Sesi = require("./Sesi");
 const Dosen = require("./Dosen");
 const MataKuliah = require("./MataKuliah");
+const TidakBersedia = require("./Exception");
 
 Router.use("/users", Users);
 Router.use("/WelcomePage", WelcomePage);
@@ -25,10 +26,13 @@ Router.use("/ruang", Ruang);
 Router.use("/sesi", Sesi);
 Router.use("/dosen", Dosen);
 Router.use("/mata-kuliah", MataKuliah);
+Router.use("/tidak-bersedia", TidakBersedia);
 
 // Welcome Page HTML
 Router.use("/", (req, res, next) => {
-    res.status(404).sendFile(path.join(rootDir, "src" , "Views", "WelcomePage.html"));
+    res.status(404).sendFile(
+        path.join(rootDir, "src", "Views", "WelcomePage.html")
+    );
 });
 
 module.exports = Router;
