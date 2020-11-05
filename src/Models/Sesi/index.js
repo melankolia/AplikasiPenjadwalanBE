@@ -12,13 +12,27 @@ module.exports = {
     },
     getSesi: (data = "", payload = "") => {
         let sql = data
-            ? `SELECT * FROM sesi ${data && "LIMIT " + data.JumlahSKS}`
+            ? `SELECT * FROM sesi`
             : `SELECT id_sesi, nama_ruangan, name_hari AS nama_hari, range_jam FROM sesi
             INNER JOIN ruang on sesi.id_ruang = ruang.id_ruang
             INNER JOIN jadwal_hari on sesi.id_hari = jadwal_hari.id_hari
             INNER JOIN jadwal_jam on sesi.id_jam = jadwal_jam.id_jam
             WHERE nama_ruangan LIKE "%${payload}%"
             ORDER BY nama_hari DESC, nama_ruangan ASC, range_jam ASC`;
+
+        return new Promise((resolve, reject) => {
+            Database.query(sql, (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            });
+        });
+    },
+    getSesiException: (payload) => {
+        let sql = `SELECT 	nidn_dosen,
+                            GROUP_CONCAT(id_sesi) AS id_sesi
+                    FROM tidak_bersedia
+                    WHERE nidn_dosen="${payload}"
+                    GROUP BY nidn_dosen;`;
 
         return new Promise((resolve, reject) => {
             Database.query(sql, (err, response) => {

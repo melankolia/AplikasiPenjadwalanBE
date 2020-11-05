@@ -12,6 +12,15 @@ module.exports = {
                 Response.failed(res, err, next);
             });
     },
+    getDosenAvailable: (req, res, next) => {
+        Model.getDosenAvailable()
+            .then((result) => {
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, err, next);
+            });
+    },
     createDosen: (req, res, next) => {
         let payload = [
             req.body && req.body.nidn_dosen,

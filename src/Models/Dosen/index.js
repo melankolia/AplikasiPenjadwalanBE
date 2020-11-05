@@ -10,6 +10,19 @@ module.exports = {
             });
         });
     },
+    getDosenAvailable: () => {
+        let sql = `    
+            SELECT	dosen.nama as nama_dosen,
+                    dosen.nidn_dosen as nidn_dosen 
+            FROM mata_kuliah
+            INNER JOIN dosen on mata_kuliah.nidn_dosen = dosen.nidn_dosen;`;
+        return new Promise((resolve, reject) => {
+            Database.query(sql, (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            });
+        });
+    },
     createDosen: (payload) => {
         let sql = `INSERT INTO dosen (nidn_dosen, nama, telpon) VALUES (?, ?, ?)`;
         return new Promise((resolve, reject) => {
@@ -20,7 +33,8 @@ module.exports = {
         });
     },
     updateDosen: (payload) => {
-        let sql = "UPDATE dosen SET nidn_dosen=?,nama=?, telpon=? WHERE nidn_dosen = ?";
+        let sql =
+            "UPDATE dosen SET nidn_dosen=?,nama=?, telpon=? WHERE nidn_dosen = ?";
         return new Promise((resolve, reject) => {
             Database.query(sql, [...payload], (err, response) => {
                 if (!err) resolve(response);
@@ -36,5 +50,5 @@ module.exports = {
                 else reject(err);
             });
         });
-    }
+    },
 };

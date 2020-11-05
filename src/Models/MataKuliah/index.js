@@ -14,7 +14,7 @@ module.exports = {
                 FROM mata_kuliah
         INNER JOIN dosen on mata_kuliah.nidn_dosen = dosen.nidn_dosen
         WHERE name_mk LIKE "%${payload}%";`
-                : `SELECT id_matkul, name_mk, sks FROM mata_kuliah`;
+                : `SELECT id_matkul, name_mk, sks, nidn_dosen FROM mata_kuliah`;
         return new Promise((resolve, reject) => {
             Database.query(sql, (err, response) => {
                 if (!err) resolve(response);

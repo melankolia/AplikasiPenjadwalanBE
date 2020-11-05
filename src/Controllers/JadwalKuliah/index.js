@@ -1,24 +1,26 @@
 const Model = require("../../Models/JadwalKuliah");
+const ModelException = require("../../Models/Exception");
 const ModelMatkul = require("../../Models/MataKuliah");
 const ModelHari = require("../../Models/JadwalHari");
 const ModelJam = require("../../Models/JadwalJam");
 const ModelRuang = require("../../Models/Ruang");
 const ModelSesi = require("../../Models/Sesi");
 const Response = require("../../Utils/Helper/Responses");
+const Helper = require("../../Utils/Helper/Checker");
 
 module.exports = {
     getJadwalKuliah: (req, res, next) => {
-        let payload  = req.query && req.query.name_mk || "";
+        let payload = (req.query && req.query.name_mk) || "";
 
         Model.getJadwalKuliah(payload)
             .then((result) => {
                 result.forEach((e) => {
-                    let tempJam = e.jam.split(',');
+                    let tempJam = e.jam.split(",");
                     let tempString = `${tempJam[0].slice(0, 5)} - ${tempJam[
-                      tempJam.length - 1
+                        tempJam.length - 1
                     ].slice(-5)}`;
                     e.jam = tempString;
-                  });
+                });
                 Response.success(res, result);
             })
             .catch((err) => {
@@ -79,6 +81,7 @@ module.exports = {
         let sesi = [];
         let mataKuliah = [];
         let jadwalMatKul = [];
+        let exception = [];
 
         try {
             await Model.checkTotal()
@@ -104,9 +107,8 @@ module.exports = {
                     Response.failed(res, err, next);
                 });
 
-            await ModelSesi.getSesi(total)
+            await ModelSesi.getSesi("generate")
                 .then((response) => {
-                    console.log(sesi);
                     sesi = [...response];
                 })
                 .catch((err) => {
@@ -121,27 +123,63 @@ module.exports = {
                     Response.failed(res, err, next);
                 });
 
-            let pointerMatKul = 0;
-            let pointerIndex = 0;
-            sesi.forEach((e) => {
-                if (pointerIndex < mataKuliah[pointerMatKul].sks) {
-                    jadwalMatKul = [
-                        ...jadwalMatKul,
-                        [mataKuliah[pointerMatKul].id_matkul, e.id_sesi],
-                    ];
-                    pointerIndex++;
+            await ModelException.exceptionForGenerate()
+                .then((result) => {
+                    result.map((e) => (e.id_sesi = e.id_sesi.split(",")));
+                    exception = [...result];
+                })
+                .catch((err) => {
+                    Response.failed(res, err, next);
+                });
+
+            let pointerMatkul = 0;
+            let pointerSesi = 0;
+            let pointerLoop = 0;
+
+            while (pointerLoop < sesi.length) {
+                if (pointerMatkul < mataKuliah.length) {
+                    if (pointerSesi < mataKuliah[pointerMatkul].sks) {
+                        let filtered = exception.find(
+                            (e) =>
+                                e.nidn_dosen ===
+                                mataKuliah[pointerMatkul].nidn_dosen
+                        );
+
+                        if (filtered) {
+                            let checkException = filtered.id_sesi.find(
+                                (e) => e == sesi[pointerLoop].id_sesi
+                            );
+                            if (checkException) {
+                                pointerLoop++;
+                                continue;
+                            }
+                        }
+
+                        // Assign Matakuliah dan Id Sesi
+                        jadwalMatKul = [
+                            ...jadwalMatKul,
+                            [
+                                mataKuliah[pointerMatkul].id_matkul,
+                                sesi[pointerLoop].id_sesi,
+                            ],
+                        ];
+
+                        // Jika sudah diassign maka akan dihapus dari sesi
+                        sesi.splice(pointerLoop, 1);
+                        pointerSesi++;
+                    } else {
+                        
+                        // Looping sesi dari awal lagi
+                        pointerMatkul++;
+                        pointerLoop = 0;
+                        pointerSesi = 0;
+                    }
                 } else {
-                    pointerMatKul++;
-                    pointerIndex = 0;
-
-                    jadwalMatKul = [
-                        ...jadwalMatKul,
-                        [mataKuliah[pointerMatKul].id_matkul, e.id_sesi],
-                    ];
-                    pointerIndex++;
+                    break;
                 }
-            });
+            }
 
+            console.log(jadwalMatKul);
             Model.generateJadwalKuliah(jadwalMatKul)
                 .then((result) => {
                     Response.success(res, result);
@@ -150,18 +188,28 @@ module.exports = {
                     Response.failed(res, err, next);
                 });
         } catch (error) {
-            response.failed(res, error, next);
+            Response.failed(res, error, next);
         }
     },
     cleanUpJadwal: async (_, res, next) => {
-        ModelSesi.cleanUpSesi()
-            .then((response) => {
-                !response.affectedRows &&
-                    Response.failed(res, "Gagal Menghapus Data Sesi");
-                Response.success(res, true);
-            })
-            .catch((err) => {
-                Response.failed(res, err, next);
-            });
+        try {
+            await ModelSesi.cleanUpSesi()
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((err) => {
+                    throw new Error(err);
+                });
+            await ModelException.cleanUpException()
+                .then((response) => {
+                    Response.success(res, true);
+                })
+                .catch((err) => {
+                    throw new Error(err);
+                });
+        } catch (error) {
+            console.log(error);
+            Response.failed(res, error, next);
+        }
     },
 };

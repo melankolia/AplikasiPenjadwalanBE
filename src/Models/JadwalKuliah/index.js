@@ -2,14 +2,13 @@ const Database = require("../../Utils/Configs/db");
 
 module.exports = {
     getJadwalKuliah: (payload = "") => {
-        let sql = `SELECT 	name_mk, 
-                        GROUP_CONCAT(id_jadwal) AS id_jadwal,
+        let sql = `SELECT 
+                        nama_hari,
+                        name_mk,
                         GROUP_CONCAT(DISTINCT nama_dosen) AS nama_dosen,
-                        GROUP_CONCAT(DISTINCT kode_mk) AS kode_mk,
+                        GROUP_CONCAT(DISTINCT nama_ruangan) AS nama_ruangan,
                         GROUP_CONCAT(DISTINCT sks) AS sks,
                         GROUP_CONCAT(DISTINCT semester) AS semester,
-                        GROUP_CONCAT(DISTINCT nama_ruangan) AS nama_ruangan,
-                        GROUP_CONCAT(DISTINCT nama_hari) AS nama_hari,
                         GROUP_CONCAT(range_jam) AS jam
                     FROM jadwal_kuliah
                     INNER JOIN (
@@ -30,7 +29,8 @@ module.exports = {
                         INNER JOIN jadwal_jam on sesi.id_jam = jadwal_jam.id_jam
                     ) AS sesi_temp on jadwal_kuliah.id_sesi = sesi_temp.id_sesi
                     WHERE name_mk LIKE "%${payload}%"
-                    GROUP BY name_mk;`;
+                    GROUP BY name_mk, nama_hari
+                    ORDER BY nama_hari DESC;`;
         return new Promise((resolve, reject) => {
             Database.query(sql, (err, response) => {
                 if (!err) resolve(response);
