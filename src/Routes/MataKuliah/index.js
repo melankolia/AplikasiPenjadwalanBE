@@ -7,7 +7,7 @@ Router.get("/", Controller.getMataKuliah);
 Router.get("/check", Controller.countMataKuliah);
 Router.get("/:id_matkul", Controller.getDetailMataKuliah);
 Router.post("/", Controller.createMataKuliah);
-Router.put("/", Controller.updateMataKuliah);
+Router.put("/:id_matkul", Controller.updateMataKuliah);
 Router.delete("/", Controller.deleteMataKuliah);
 
 module.exports = Router;

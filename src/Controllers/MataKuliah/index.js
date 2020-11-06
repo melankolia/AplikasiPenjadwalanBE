@@ -61,7 +61,7 @@ module.exports = {
             req.body && req.body.semester,
             req.body && req.body.jenis,
             req.body && req.body.nidn_dosen,
-            req.query && req.query.id_matkul,
+            req.params && req.params.id_matkul,
         ];
         !payload[6] && Response.badRequest(res, "Param Salah");
 

@@ -38,7 +38,7 @@ module.exports = {
     updateHari: (req, res, next) => {
         let payload = [
             req.body && req.body.name_hari,
-            req.query && req.query.id_hari
+            req.params && req.params.id_hari
         ];
         Model.updateHari(payload)
             .then((_) => {

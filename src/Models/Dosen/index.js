@@ -35,7 +35,7 @@ module.exports = {
         });
     },
     createDosen: (payload) => {
-        let sql = `INSERT INTO dosen (nidn_dosen, nama, telpon) VALUES (?, ?, ?)`;
+        let sql = `INSERT INTO dosen (nidn_dosen, nama, address, telpon) VALUES (?, ?, ?, ?)`;
         return new Promise((resolve, reject) => {
             Database.query(sql, [...payload], (err, response) => {
                 if (!err) resolve(response);
@@ -45,7 +45,7 @@ module.exports = {
     },
     updateDosen: (payload) => {
         let sql =
-            "UPDATE dosen SET nidn_dosen=?,nama=?, telpon=? WHERE nidn_dosen = ?";
+            "UPDATE dosen SET nidn_dosen=?,nama=?, address=?, telpon=? WHERE nidn_dosen = ?";
         return new Promise((resolve, reject) => {
             Database.query(sql, [...payload], (err, response) => {
                 if (!err) resolve(response);

@@ -40,7 +40,7 @@ module.exports = {
     updateJam: (req, res, next) => {
         let payload = [
             req.body && req.body.range_jam,
-            req.query && req.query.id_jam,
+            req.params && req.params.id_jam,
         ];
         !payload[1] && Response.badRequest(res, "Param Salah");
 

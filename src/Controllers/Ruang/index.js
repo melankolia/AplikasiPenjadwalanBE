@@ -43,10 +43,10 @@ module.exports = {
     },
     updateRuang: (req, res, next) => {
         let payload = [
-            req.body && req.body.nama_ruangan,
+            req.body && req.body.name_ruangan,
             req.body && req.body.kapasitas,
             req.body && req.body.jenis,
-            req.query && req.query.id_ruang,
+            req.params && req.params.id_ruang,
         ];
         !payload[3] && Response.failed(res, "Param Salah");
 

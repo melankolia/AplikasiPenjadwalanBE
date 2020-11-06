@@ -7,7 +7,7 @@ Router.get("/", Controller.getDosen);
 Router.get("/available", Controller.getDosenAvailable);
 Router.get("/:nidn_dosen", Controller.getDetailDosen);
 Router.post("/", Controller.createDosen);
-Router.put("/", Controller.updateDosen);
+Router.put("/:nidn_dosen", Controller.updateDosen);
 Router.delete("/", Controller.deleteDosen);
 
 module.exports = Router;

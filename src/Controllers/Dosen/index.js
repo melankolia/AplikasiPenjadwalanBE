@@ -38,6 +38,7 @@ module.exports = {
         let payload = [
             req.body && req.body.nidn_dosen,
             req.body && req.body.nama,
+            req.body && req.body.address,
             (req.body && req.body.telp) || "",
         ];
         Model.createDosen(payload)
@@ -52,17 +53,19 @@ module.exports = {
         let payload = [
             req.body && req.body.nidn_dosen,
             req.body && req.body.nama,
+            req.body && req.body.address,
             (req.body && req.body.telp) || "",
-            req.body && req.body.nidn_dosen,
+            req.params && req.params.nidn_dosen,
         ];
         Model.updateDosen(payload)
-            .then((_) => {
+            .then((result) => {
+                console.log(result);
                 !result.affectedRows &&
                     Response.failed(res, "nidn_dosen Tidak Ditemukan");
                 Response.success(res, true);
             })
             .catch((err) => {
-                Response.failed(res, err);
+                Response.failed(res, err, next);
             });
     },
     deleteDosen: (req, res, next) => {
