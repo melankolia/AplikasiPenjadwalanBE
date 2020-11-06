@@ -6,7 +6,6 @@ const ModelJam = require("../../Models/JadwalJam");
 const ModelRuang = require("../../Models/Ruang");
 const ModelSesi = require("../../Models/Sesi");
 const Response = require("../../Utils/Helper/Responses");
-const Helper = require("../../Utils/Helper/Checker");
 
 module.exports = {
     getJadwalKuliah: (req, res, next) => {
@@ -32,18 +31,36 @@ module.exports = {
         try {
             await ModelJam.getJam()
                 .then((response) => {
+                    if (response.length === 0)
+                        Response.badRequest(
+                            res,
+                            "Mohon Isi Jam Terlebih Dahulu",
+                            next
+                        );
                     result.jam = [...response];
                 })
                 .catch((err) => console.log(err));
 
             await ModelHari.getHari()
                 .then((response) => {
+                    if (response.length === 0)
+                        Response.badRequest(
+                            res,
+                            "Mohon Isi Hari Terlebih Dahulu",
+                            next
+                        );
                     result.hari = [...response];
                 })
                 .catch((err) => console.log(err));
 
             await ModelRuang.getRuang()
                 .then((response) => {
+                    if (response.length === 0)
+                        Response.badRequest(
+                            res,
+                            "Mohon Isi Ruang Terlebih Dahulu",
+                            next
+                        );
                     result.ruang = [...response];
                 })
                 .catch((err) => console.log(err));
@@ -92,14 +109,18 @@ module.exports = {
                     result.JumlahSKS = parseInt(result.JumlahSKS);
                     total = {...result};
 
+                    // Kurangi total jumlah sesi dari jumlah jadwal tidak bersedia
+                    total.JumlahSesi =
+                        total.JumlahSesi - total.JumlahTidakBersedia;
+
+                    console.log(total.JumlahSesi);
+
                     if (total.JumlahSKS > total.JumlahSesi)
-                        Response.failed(
+                        Response.badRequest(
                             res,
-                            {
-                                result: `Sesi Tidak Mencukupi, Kurang ${
-                                    total.JumlahSKS - total.JumlahSesi
-                                } Sesi`,
-                            },
+                            `Sesi Tidak Mencukupi, Kurang ${
+                                total.JumlahSKS - total.JumlahSesi
+                            } Sesi`,
                             next
                         );
                 })
@@ -168,7 +189,6 @@ module.exports = {
                         sesi.splice(pointerLoop, 1);
                         pointerSesi++;
                     } else {
-                        
                         // Looping sesi dari awal lagi
                         pointerMatkul++;
                         pointerLoop = 0;
@@ -190,6 +210,16 @@ module.exports = {
         } catch (error) {
             Response.failed(res, error, next);
         }
+    },
+    checkJadwal: (_, res, next) => {
+        Model.checkJadwal()
+            .then((result) => {
+                result[0] && (result = result[0]);
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, error, next);
+            });
     },
     cleanUpJadwal: async (_, res, next) => {
         try {

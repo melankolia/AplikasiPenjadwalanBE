@@ -14,6 +14,19 @@ module.exports = {
                 Response.failed(res, err);
             });
     },
+    getDetailRuang: (req, res, next) => {
+        let payload = req.params && req.params.id_ruang;
+        Model.getDetailRuang(payload)
+            .then((result) => {
+                result[0]
+                    ? (result = result[0])
+                    : Response.badRequest(res, "id_ruang Tidak Ditemukan");
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, err, next);
+            });
+    },
     createRuang: (req, res, next) => {
         let payload = [
             req.body && req.body.name_ruangan,

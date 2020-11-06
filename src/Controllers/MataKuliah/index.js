@@ -13,6 +13,29 @@ module.exports = {
                 Response.failed(res, err);
             });
     },
+    getDetailMataKuliah: (req, res, next) => {
+        let payload = req.params && req.params.id_matkul;
+        Model.getDetailMataKuliah(payload)
+            .then((result) => {
+                result[0]
+                    ? (result = result[0])
+                    : Response.badRequest(res, "id_matkul Tidak Ditemukan");
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, err, next);
+            });
+    },
+    countMataKuliah: (req, res, next) => {
+        Model.countMataKuliah()
+            .then((result) => {
+                result = result[0];
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, err);
+            });
+    },
     createMataKuliah: (req, res, next) => {
         let payload = [
             req.body && req.body.kode_mk,

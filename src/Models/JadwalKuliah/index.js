@@ -41,6 +41,7 @@ module.exports = {
     checkTotal: (_) => {
         let sql = `SELECT   (SELECT COUNT(id_sesi) FROM sesi) AS JumlahSesi,
                             (SELECT SUM(sks) FROM mata_kuliah) AS JumlahSKS,
+                            (SELECT COUNT(id_sesi) FROM tidak_bersedia) AS JumlahTidakBersedia,
                             (SELECT COUNT(id_matkul) FROM mata_kuliah) AS JumlahMatkul`;
         return new Promise((resolve, reject) => {
             Database.query(sql, (err, response) => {
@@ -53,6 +54,16 @@ module.exports = {
         let sql = `INSERT INTO jadwal_kuliah (id_matkul, id_sesi) VALUES ?`;
         return new Promise((resolve, reject) => {
             Database.query(sql, [data], (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            });
+        });
+    },
+    checkJadwal: () => {
+        let sql =  `SELECT COUNT(id_jadwal) TotalJadwal
+                    FROM jadwal_kuliah`;
+        return new Promise((resolve, reject) => {
+            Database.query(sql, (err, response) => {
                 if (!err) resolve(response);
                 else reject(err);
             });

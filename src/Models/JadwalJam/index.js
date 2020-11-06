@@ -10,6 +10,17 @@ module.exports = {
             })
         })
     },
+    getDetailJam: (payload) => {
+        let sql =   `SELECT * 
+                    FROM jadwal_jam
+                    WHERE id_jam='${payload}';`
+        return new Promise((resolve, reject) => {
+            Database.query(sql, (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            });
+        });
+    },
     createJam: (payload) => {
         let sql = `INSERT INTO jadwal_jam (range_jam) VALUES (?)`;
         return new Promise((resolve, reject) => {

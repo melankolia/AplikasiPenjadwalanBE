@@ -10,6 +10,17 @@ module.exports = {
             })
         })
     },
+    getDetailRuang: (payload) => {
+        let sql =   `SELECT * 
+                    FROM ruang
+                    WHERE id_ruang='${payload}';`
+        return new Promise((resolve, reject) => {
+            Database.query(sql, (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            });
+        });
+    },
     createRuang: (payload) => {
         let sql = `INSERT INTO ruang (nama_ruangan, kapasitas, jenis) VALUES (?, ?, ?)`;
         return new Promise((resolve, reject) => {

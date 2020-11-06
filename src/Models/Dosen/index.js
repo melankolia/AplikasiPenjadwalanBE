@@ -10,6 +10,17 @@ module.exports = {
             });
         });
     },
+    getDetailDosen: (payload) => {
+        let sql =   `SELECT * 
+                    FROM dosen
+                    WHERE nidn_dosen='${payload}';`
+        return new Promise((resolve, reject) => {
+            Database.query(sql, (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            });
+        });
+    },
     getDosenAvailable: () => {
         let sql = `    
             SELECT	dosen.nama as nama_dosen,

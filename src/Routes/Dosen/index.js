@@ -5,6 +5,7 @@ const Controller = require("../../Controllers/Dosen");
 
 Router.get("/", Controller.getDosen);
 Router.get("/available", Controller.getDosenAvailable);
+Router.get("/:nidn_dosen", Controller.getDetailDosen);
 Router.post("/", Controller.createDosen);
 Router.put("/", Controller.updateDosen);
 Router.delete("/", Controller.deleteDosen);

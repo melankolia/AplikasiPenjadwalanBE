@@ -12,6 +12,19 @@ module.exports = {
                 Response.failed(res, err, next);
             });
     },
+    getDetailHari: (req, res, next) => {
+        let payload = req.params && req.params.id_hari;
+        Model.getDetailHari(payload)
+            .then((result) => {
+                result[0]
+                    ? (result = result[0])
+                    : Response.badRequest(res, "id_hari Tidak Ditemukan");
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, err, next);
+            });
+    },
     createHari: (req, res, next) => {
         let payload = [req.body && req.body.name_hari];
         Model.createHari(payload)

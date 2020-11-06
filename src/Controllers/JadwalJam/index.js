@@ -12,6 +12,19 @@ module.exports = {
                 Response.failed(res, err);
             });
     },
+    getDetailJam: (req, res, next) => {
+        let payload = req.params && req.params.id_jam;
+        Model.getDetailJam(payload)
+            .then((result) => {
+                result[0]
+                    ? (result = result[0])
+                    : Response.badRequest(res, "id_jam Tidak Ditemukan");
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, err, next);
+            });
+    },
     createJam: (req, res, next) => {
         let payload = [req.body && req.body.range_jam];
         !payload[0] && Response.badRequest(res, "Param Salah");

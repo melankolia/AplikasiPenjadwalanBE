@@ -10,6 +10,17 @@ module.exports = {
             })
         })
     },
+    getDetailHari: (payload) => {
+        let sql =   `SELECT * 
+                    FROM jadwal_hari
+                    WHERE id_hari='${payload}';`
+        return new Promise((resolve, reject) => {
+            Database.query(sql, (err, response) => {
+                if (!err) resolve(response);
+                else reject(err);
+            });
+        });
+    },
     createHari: (payload) => {
         let sql = `INSERT INTO jadwal_hari (name_hari) VALUES (?)`;
         return new Promise((resolve, reject) => {

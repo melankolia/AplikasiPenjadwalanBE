@@ -3,9 +3,22 @@ const Response = require("../../Utils/Helper/Responses");
 
 module.exports = {
     getDosen: (req, res, next) => {
-        let payload = req.query && req.query.nama_dosen || "";
+        let payload = (req.query && req.query.nama_dosen) || "";
         Model.getDosen(payload)
             .then((result) => {
+                Response.success(res, result);
+            })
+            .catch((err) => {
+                Response.failed(res, err, next);
+            });
+    },
+    getDetailDosen: (req, res, next) => {
+        let payload = req.params && req.params.nidn_dosen;
+        Model.getDetailDosen(payload)
+            .then((result) => {
+                result[0]
+                    ? (result = result[0])
+                    : Response.badRequest(res, "nidn_dosen Tidak Ditemukan");
                 Response.success(res, result);
             })
             .catch((err) => {
