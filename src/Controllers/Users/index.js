@@ -13,6 +13,8 @@ module.exports = {
     },
     register: (req, res) => {
         const {body} = req;
+        body.role = 'mahasiswa';
+        
         Model.createUser(body)
             .then((_) => {
                 Response.success(res, true);
